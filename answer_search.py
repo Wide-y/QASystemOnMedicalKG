@@ -6,16 +6,17 @@
 
 from py2neo import Graph
 
+
 class AnswerSearcher:
     def __init__(self):
         self.g = Graph(
-            host="127.0.0.1",
-            http_port=7474,
-            user="lhy",
-            password="lhy123")
+            "http://127.0.0.1:7474",
+            user="neo4j",
+            password="lky123")
         self.num_limit = 20
 
     '''执行cypher查询，并返回相应结果'''
+
     def search_main(self, sqls):
         final_answers = []
         for sql_ in sqls:
@@ -31,6 +32,7 @@ class AnswerSearcher:
         return final_answers
 
     '''根据对应的qustion_type，调用相应的回复模板'''
+
     def answer_prettify(self, question_type, answers):
         final_answer = []
         if not answers:
@@ -79,7 +81,7 @@ class AnswerSearcher:
         elif question_type == 'disease_desc':
             desc = [i['m.desc'] for i in answers]
             subject = answers[0]['m.name']
-            final_answer = '{0},熟悉一下：{1}'.format(subject,  '；'.join(list(set(desc))[:self.num_limit]))
+            final_answer = '{0},熟悉一下：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
         elif question_type == 'disease_acompany':
             desc1 = [i['n.name'] for i in answers]
@@ -97,7 +99,8 @@ class AnswerSearcher:
             do_desc = [i['n.name'] for i in answers if i['r.name'] == '宜吃']
             recommand_desc = [i['n.name'] for i in answers if i['r.name'] == '推荐食谱']
             subject = answers[0]['m.name']
-            final_answer = '{0}宜食的食物包括有：{1}\n推荐食谱包括有：{2}'.format(subject, ';'.join(list(set(do_desc))[:self.num_limit]), ';'.join(list(set(recommand_desc))[:self.num_limit]))
+            final_answer = '{0}宜食的食物包括有：{1}\n推荐食谱包括有：{2}'.format(subject, ';'.join(list(set(do_desc))[:self.num_limit]),
+                                                                 ';'.join(list(set(recommand_desc))[:self.num_limit]))
 
         elif question_type == 'food_not_disease':
             desc = [i['m.name'] for i in answers]

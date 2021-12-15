@@ -9,6 +9,8 @@ from question_parser import *
 from answer_search import *
 
 '''问答类'''
+
+
 class ChatBotGraph:
     def __init__(self):
         self.classifier = QuestionClassifier()
@@ -16,7 +18,7 @@ class ChatBotGraph:
         self.searcher = AnswerSearcher()
 
     def chat_main(self, sent):
-        answer = '您好，我是小勇医药智能助理，希望可以帮到您。如果没答上来，可联系https://liuhuanyong.github.io/。祝您身体棒棒！'
+        answer = '您好，我是医药智能助理，希望可以帮到您。祝您身体棒棒！'
         res_classify = self.classifier.classify(sent)
         if not res_classify:
             return answer
@@ -27,10 +29,13 @@ class ChatBotGraph:
         else:
             return '\n'.join(final_answers)
 
+
 if __name__ == '__main__':
     handler = ChatBotGraph()
     while 1:
-        question = input('用户:')
-        answer = handler.chat_main(question)
-        print('小勇:', answer)
-
+        try:
+            question = input('用户:')
+            answer = handler.chat_main(question)
+            print('小勇:', answer)
+        except UnicodeDecodeError:
+            print('小勇: 无法解析异常字符。')
